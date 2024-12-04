@@ -1,5 +1,5 @@
-## Next.js App Router Course - Starter
+IN PROGRESS - web app based on https://nextjs.org/learn/dashboard-app tutorial
 
-This is the starter template for the Next.js App Router Course. It contains the starting code for the dashboard application.
+(bun is necessary to run the app => https://bun.sh/)
 
-For more information, see the [course curriculum](https://nextjs.org/learn) on the Next.js Website.
+to start the project: bun --bun run dev
