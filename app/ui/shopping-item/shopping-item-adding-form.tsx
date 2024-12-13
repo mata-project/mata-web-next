@@ -1,17 +1,26 @@
 "use client";
 import React, { useState } from "react";
+import { ShoppingItem } from "../supermarkets-list/supermarketsListComponent";
+import { addItem } from "../../lib/shopping-items";
+import router from "next/router";
 
-const ShoppingItemComponent: React.FC = () => {
-  const [itemName, setItemName] = useState<string>("");
+export default function ShoppingItemAddingForm() {
+  const [name, setName] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [supermarket, setSupermarket] = useState<string>("");
 
   const handleAddItem = () => {
-    if (itemName && quantity > 0 && supermarket) {
-      console.log("Item added:", { itemName, quantity, supermarket });
-      setItemName("");
+    if (name && quantity > 0 && supermarket) {
+      //console.log("Item added:", { name, quantity, supermarket });
+      setName("");
       setQuantity(1);
       setSupermarket("");
+      const shoppingItem: ShoppingItem = {
+        name,
+        quantity,
+        supermarket,
+      };
+      addItem(shoppingItem);
     } else {
       alert("Please fill all fields before adding an item.");
     }
@@ -33,8 +42,8 @@ const ShoppingItemComponent: React.FC = () => {
           Item Name:
           <input
             type="text"
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
           />
         </label>
@@ -84,6 +93,4 @@ const ShoppingItemComponent: React.FC = () => {
       </button>
     </div>
   );
-};
-
-export default ShoppingItemComponent;
+}

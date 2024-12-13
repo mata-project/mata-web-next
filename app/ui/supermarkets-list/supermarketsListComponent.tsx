@@ -1,51 +1,97 @@
 "use client";
-import React, { useState } from "react";
-import AddedItemsList from "../added-items/addedItemsList";
 
-interface Item {
-  itemName: string;
-  //   quantity: number;
-  //   supermarket: string;
-}
+import { getItems } from "../../lib/shopping-items";
 
-const SupermarketsListComponent: React.FC = () => {
-  const [items, setItems] = useState<Item[]>([
-    { itemName: "ekmek" },
-    { itemName: "yoghurt" },
-  ]);
+type SupermarketTile = {
+  name: string;
+  shoppingItems: ShoppingItem[];
+};
 
-  const supermarkets = ["Lidl", "Aldi", "AH", "Turko", "Carrefour", "Action"];
+export type ShoppingItem = {
+  name: string;
+  quantity: number;
+  supermarket?: string;
+};
 
-  const addItem = (itemName: string, supermarket: string) => {
-    const newItem: Item = { itemName };
-    setItems((prevItems) => [...prevItems, newItem]);
-  };
-
+export default function SupermarketsList() {
+  const supermarketTiles = getSuperMarketTiles();
   return (
     <div
       style={{
-        border: "1px solid #ccc",
+        border: "0.1px solid #ccc",
         padding: "16px",
         borderRadius: "8px",
         maxWidth: "400px",
         margin: "0 auto",
-        marginTop: "16px",
       }}
     >
-      <h2>Supermarkets</h2>
+      <h2
+        style={{ color: "darkblue", fontWeight: "bold", marginBottom: "10px" }}
+      >
+        Supermarkets
+      </h2>
       <ul style={{ listStyleType: "none", padding: "0" }}>
-        {supermarkets.map((supermarket, index) => (
+        {supermarketTiles.map((supermarket, index) => (
           <li
             key={index}
             style={{ padding: "8px 0", borderBottom: "1px solid #ddd" }}
           >
-            {supermarket}
-            {supermarket === "Aldi" ? <AddedItemsList items={items} /> : null}
+            <h2
+              className="supermarket-name"
+              style={{ color: "navy", fontWeight: "bold" }}
+            >
+              {supermarket.name}
+            </h2>
+            {/* shoppingItems */}
+            <div>
+              {supermarket.shoppingItems.map((item, index) => (
+                <div key={index}>
+                  <h2
+                    className="shopping-item-name"
+                    style={{ color: "blue", fontWeight: "bold" }}
+                  >
+                    {item.name}
+                  </h2>
+                  <p
+                    className="shopping-item-price"
+                    style={{ color: "green", fontWeight: "bold" }}
+                  >
+                    {item.quantity}
+                  </p>
+                  <button
+                    className="delete-button"
+                    style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      padding: "8px 16px",
+                      borderRadius: "20px",
+                      cursor: "pointer",
+                      fontSize: "smaller",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              ))}
+            </div>
           </li>
         ))}
       </ul>
     </div>
   );
-};
+}
 
-export default SupermarketsListComponent;
+//FIXME include database
+function getSuperMarketTiles(): SupermarketTile[] {
+  const shoppingItems = getItems();
+  shoppingItems.forEach((item) => console.log(item.name));
+  const tiles: SupermarketTile[] = [];
+  ["Lidl", "Aldi", "AH", "Turko", "Carrefour", "Action"].forEach((name) => {
+    const tile: SupermarketTile = {
+      name,
+      shoppingItems: [{ name: "test-item", quantity: 1 }],
+    };
+    tiles.push(tile);
+  });
+  return tiles;
+}
