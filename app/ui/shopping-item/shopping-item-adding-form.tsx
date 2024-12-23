@@ -2,32 +2,29 @@
 import React, { useState } from "react";
 import { ShoppingItem } from "../supermarkets-list/supermarketsListComponent";
 import router from "next/router";
+import { Item } from "../item/item";
 
 export default function ShoppingItemAddingForm({
   addItem,
 }: {
-  addItem: (param: string) => void;
+  addItem: (item: Item) => void;
 }) {
   const [name, setName] = useState<string>("");
-  // const [quantity, setQuantity] = useState<number>(1);
-  // const [supermarket, setSupermarket] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(1);
+  const [supermarket, setSupermarket] = useState<string>("");
 
   const handleAddItem = () => {
-    addItem(name);
-    // if (name && quantity > 0 && supermarket) {
-    //   //console.log("Item added:", { name, quantity, supermarket });
-    //   setName("");
-    //   setQuantity(1);
-    //   setSupermarket("");
-    //   const shoppingItem: ShoppingItem = {
-    //     name,
-    //     quantity,
-    //     supermarket,
-    //   };
-    //   addItem(shoppingItem);
-    // } else {
-    //   alert("Please fill all fields before adding an item.");
-    // }
+    if (name) {
+      const item: Item = {
+        itemName: name,
+      };
+      addItem(item);
+      setName("");
+      setQuantity(1);
+      setSupermarket("");
+    } else {
+      alert("Please fill all fields before adding an item.");
+    }
   };
 
   return (
@@ -75,10 +72,10 @@ export default function ShoppingItemAddingForm({
             <option value="">Select a supermarket</option>
             <option value="Lidl">Lidl</option>
             <option value="Aldi">Aldi</option>
-            <option value="AH">AH</option>
+            {/* <option value="AH">AH</option>
             <option value="Turko">Turko</option>
             <option value="Carrefour">Carrefour</option>
-            <option value="Action">Action</option>
+            <option value="Action">Action</option> */}
           </select>
         </label>
       </div>

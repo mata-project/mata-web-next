@@ -1,5 +1,7 @@
 "use client";
 
+import { Item } from "../item/item";
+
 type SupermarketTile = {
   name: string;
   shoppingItems: ShoppingItem[];
@@ -11,11 +13,11 @@ export type ShoppingItem = {
   supermarket?: string;
 };
 type SupermarketsListProps = {
-  things: string[];
+  items: Item[];
 };
 
-export default function SupermarketsList({ things }: SupermarketsListProps) {
-  const supermarketTiles = getSuperMarketTiles(things);
+export default function SupermarketsList({ items }: SupermarketsListProps) {
+  const supermarketTiles = getSuperMarketTiles(items);
   return (
     <div
       style={{
@@ -83,19 +85,26 @@ export default function SupermarketsList({ things }: SupermarketsListProps) {
 }
 
 //FIXME include database
-function getSuperMarketTiles(things: string[]): SupermarketTile[] {
-  let order = 0;
-  things.forEach((thing) => {
-    console.log(thing + " " + order);
-    order++;
+function getSuperMarketTiles(items: Item[]): SupermarketTile[] {
+  const supermarketMap = new Map<string, ShoppingItem[]>();
+
+  ["Lidl"].forEach((supermarketName) => {
+    const shoppingItems: ShoppingItem[] = items.map((item) => ({
+      name: item.itemName,
+      quantity: 1,
+    }));
+
+    // Add or merge items for this supermarket
+    if (supermarketMap.has(supermarketName)) {
+      supermarketMap.get(supermarketName)?.push(...shoppingItems);
+    } else {
+      supermarketMap.set(supermarketName, shoppingItems);
+    }
   });
-  const tiles: SupermarketTile[] = [];
-  ["Lidl", "Aldi", "AH", "Turko", "Carrefour", "Action"].forEach((name) => {
-    const tile: SupermarketTile = {
-      name,
-      shoppingItems: [{ name: "test-item", quantity: 1 }],
-    };
-    tiles.push(tile);
-  });
-  return tiles;
+
+  // Convert map to array of SupermarketTile
+  return Array.from(supermarketMap.entries()).map(([name, shoppingItems]) => ({
+    name,
+    shoppingItems,
+  }));
 }
