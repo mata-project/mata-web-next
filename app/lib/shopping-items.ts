@@ -8,6 +8,5 @@ export function addItem(item: ShoppingItem) {
 }
 
 export function getItems(): ShoppingItem[] {
-  console.log("get func" + shoppingItems);
   return shoppingItems;
 }

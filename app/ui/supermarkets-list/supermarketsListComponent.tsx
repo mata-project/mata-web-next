@@ -12,9 +12,12 @@ export type ShoppingItem = {
   quantity: number;
   supermarket?: string;
 };
+type SupermarketsListProps = {
+  things: string[];
+};
 
-export default function SupermarketsList() {
-  const supermarketTiles = getSuperMarketTiles();
+export default function SupermarketsList({ things }: SupermarketsListProps) {
+  const supermarketTiles = getSuperMarketTiles(things);
   return (
     <div
       style={{
@@ -82,7 +85,13 @@ export default function SupermarketsList() {
 }
 
 //FIXME include database
-function getSuperMarketTiles(): SupermarketTile[] {
+function getSuperMarketTiles(things: string[]): SupermarketTile[] {
+  let order = 0;
+  things.forEach((thing) => {
+    console.log(thing + " " + order);
+    order++;
+  });
+
   const shoppingItems = getItems();
   shoppingItems.forEach((item) => console.log(item.name));
   const tiles: SupermarketTile[] = [];

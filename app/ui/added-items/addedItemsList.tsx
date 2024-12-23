@@ -1,7 +1,7 @@
 // AddedItemsList.tsx
 import React from "react";
 
-interface Item {
+export interface Item {
   itemName: string;
   //   quantity: number;
   //   supermarket: string;

@@ -4,26 +4,33 @@ import { ShoppingItem } from "../supermarkets-list/supermarketsListComponent";
 import { addItem } from "../../lib/shopping-items";
 import router from "next/router";
 
-export default function ShoppingItemAddingForm() {
+export default function ShoppingItemAddingForm({
+  addItem,
+}: {
+  addItem: (param: string) => void;
+}) {
   const [name, setName] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>(1);
-  const [supermarket, setSupermarket] = useState<string>("");
+  // const [quantity, setQuantity] = useState<number>(1);
+  // const [supermarket, setSupermarket] = useState<string>("");
 
   const handleAddItem = () => {
-    if (name && quantity > 0 && supermarket) {
-      //console.log("Item added:", { name, quantity, supermarket });
-      setName("");
-      setQuantity(1);
-      setSupermarket("");
-      const shoppingItem: ShoppingItem = {
-        name,
-        quantity,
-        supermarket,
-      };
-      addItem(shoppingItem);
-    } else {
-      alert("Please fill all fields before adding an item.");
-    }
+    console.log("log from form " + name);
+
+    addItem(name);
+    // if (name && quantity > 0 && supermarket) {
+    //   //console.log("Item added:", { name, quantity, supermarket });
+    //   setName("");
+    //   setQuantity(1);
+    //   setSupermarket("");
+    //   const shoppingItem: ShoppingItem = {
+    //     name,
+    //     quantity,
+    //     supermarket,
+    //   };
+    //   addItem(shoppingItem);
+    // } else {
+    //   alert("Please fill all fields before adding an item.");
+    // }
   };
 
   return (
@@ -53,8 +60,8 @@ export default function ShoppingItemAddingForm() {
           Quantity:
           <input
             type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
+            // value={quantity}
+            // onChange={(e) => setQuantity(Number(e.target.value))}
             min="1"
             style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
           />
@@ -64,8 +71,8 @@ export default function ShoppingItemAddingForm() {
         <label>
           Supermarket:
           <select
-            value={supermarket}
-            onChange={(e) => setSupermarket(e.target.value)}
+            // value={supermarket}
+            // onChange={(e) => setSupermarket(e.target.value)}
             style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
           >
             <option value="">Select a supermarket</option>
