@@ -1,7 +1,5 @@
 "use client";
 
-import { getItems } from "../../lib/shopping-items";
-
 type SupermarketTile = {
   name: string;
   shoppingItems: ShoppingItem[];
@@ -91,9 +89,6 @@ function getSuperMarketTiles(things: string[]): SupermarketTile[] {
     console.log(thing + " " + order);
     order++;
   });
-
-  const shoppingItems = getItems();
-  shoppingItems.forEach((item) => console.log(item.name));
   const tiles: SupermarketTile[] = [];
   ["Lidl", "Aldi", "AH", "Turko", "Carrefour", "Action"].forEach((name) => {
     const tile: SupermarketTile = {

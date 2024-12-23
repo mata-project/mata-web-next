@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { ShoppingItem } from "../supermarkets-list/supermarketsListComponent";
-import { addItem } from "../../lib/shopping-items";
 import router from "next/router";
 
 export default function ShoppingItemAddingForm({
@@ -14,8 +13,6 @@ export default function ShoppingItemAddingForm({
   // const [supermarket, setSupermarket] = useState<string>("");
 
   const handleAddItem = () => {
-    console.log("log from form " + name);
-
     addItem(name);
     // if (name && quantity > 0 && supermarket) {
     //   //console.log("Item added:", { name, quantity, supermarket });
