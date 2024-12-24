@@ -37,7 +37,11 @@ export default function ShoppingItemAddingForm({
         margin: "0 auto",
       }}
     >
-      <h2>Add Shopping Item</h2>
+      <h2
+        style={{ color: "darkblue", fontWeight: "bold", marginBottom: "10px" }}
+      >
+        Add Shopping Item
+      </h2>
       <div style={{ marginBottom: "8px" }}>
         <label>
           Item Name:
