@@ -4,14 +4,9 @@ import { Item } from "../item/item";
 
 type SupermarketTile = {
   name: string;
-  shoppingItems: ShoppingItem[];
+  items: Item[];
 };
 
-export type ShoppingItem = {
-  name: string;
-  quantity: number;
-  supermarket?: string;
-};
 type SupermarketsListProps = {
   items: Item[];
 };
@@ -47,30 +42,35 @@ export default function SupermarketsList({ items }: SupermarketsListProps) {
             </h2>
             {/* shoppingItems */}
             <div>
-              {supermarket.shoppingItems.map((item, index) => (
-                <div key={index}>
+              {supermarket.items.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: "12px",
+                    margin: "8px 0",
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "6px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
                   <h2
                     className="shopping-item-name"
-                    style={{ color: "blue", fontWeight: "bold" }}
+                    style={{ color: "blue", fontWeight: "bold", margin: 0 }}
                   >
-                    {item.name}
+                    {item.itemName}
                   </h2>
-                  <p
-                    className="shopping-item-price"
-                    style={{ color: "green", fontWeight: "bold" }}
-                  >
-                    {item.quantity}
-                  </p>
                   <button
-                    className="delete-button"
                     style={{
-                      backgroundColor: "red",
+                      padding: "6px 12px",
+                      backgroundColor: "#0066cc",
                       color: "white",
-                      padding: "8px 16px",
-                      borderRadius: "20px",
+                      border: "none",
+                      borderRadius: "4px",
                       cursor: "pointer",
-                      fontSize: "smaller",
                     }}
+                    onClick={() => console.log(`Clicked ${item.itemName}`)}
                   >
                     Delete
                   </button>
@@ -86,25 +86,18 @@ export default function SupermarketsList({ items }: SupermarketsListProps) {
 
 //FIXME include database
 function getSuperMarketTiles(items: Item[]): SupermarketTile[] {
-  const supermarketMap = new Map<string, ShoppingItem[]>();
-
-  ["Lidl"].forEach((supermarketName) => {
-    const shoppingItems: ShoppingItem[] = items.map((item) => ({
-      name: item.itemName,
-      quantity: 1,
-    }));
-
-    // Add or merge items for this supermarket
-    if (supermarketMap.has(supermarketName)) {
-      supermarketMap.get(supermarketName)?.push(...shoppingItems);
-    } else {
-      supermarketMap.set(supermarketName, shoppingItems);
+  // Group items by supermarket
+  const groupedItems = items.reduce((acc, item) => {
+    if (!acc[item.supermarket]) {
+      acc[item.supermarket] = [];
     }
-  });
+    acc[item.supermarket].push(item);
+    return acc;
+  }, {} as Record<string, Item[]>);
 
-  // Convert map to array of SupermarketTile
-  return Array.from(supermarketMap.entries()).map(([name, shoppingItems]) => ({
-    name,
-    shoppingItems,
+  // Convert grouped items to SupermarketTile array
+  return Object.entries(groupedItems).map(([supermarketName, items]) => ({
+    name: supermarketName,
+    items: items,
   }));
 }
