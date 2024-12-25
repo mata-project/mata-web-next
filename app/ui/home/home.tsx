@@ -13,12 +13,21 @@ export default function HomeComponent() {
     setItems((prev) => [...prev, newItem]);
   };
 
+  const deleteItem = (supermarketName: string, itemName: string) => {
+    setItems((prev) =>
+      prev.filter(
+        (item) =>
+          !(item.itemName === itemName && item.supermarket === supermarketName)
+      )
+    );
+  };
+
   return (
     <div>
       <UserInfo />
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
-      <SupermarketsList items={items} />
+      <SupermarketsList items={items} deleteItem={deleteItem} />
     </div>
   );
 }

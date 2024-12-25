@@ -9,9 +9,13 @@ type SupermarketTile = {
 
 type SupermarketsListProps = {
   items: Item[];
+  deleteItem: (supermarketName: string, itemName: string) => void; // Add this line
 };
 
-export default function SupermarketsList({ items }: SupermarketsListProps) {
+export default function SupermarketsList({
+  items,
+  deleteItem,
+}: SupermarketsListProps) {
   const supermarketTiles = getSuperMarketTiles(items);
   return (
     <div
@@ -76,7 +80,7 @@ export default function SupermarketsList({ items }: SupermarketsListProps) {
                       borderRadius: "4px",
                       cursor: "pointer",
                     }}
-                    onClick={() => console.log(`Clicked ${item.itemName}`)}
+                    onClick={() => deleteItem(supermarket.name, item.itemName)}
                   >
                     Delete
                   </button>
