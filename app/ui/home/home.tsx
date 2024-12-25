@@ -4,6 +4,7 @@ import ShoppingItemAddingForm from "../shopping-item/shopping-item-adding-form";
 import SupermarketsList from "../supermarkets-list/supermarketsListComponent";
 import { Item } from "../item/item";
 import Banner from "../banner/banner";
+import UserInfo from "../user-info/userInfo";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
@@ -14,6 +15,7 @@ export default function HomeComponent() {
 
   return (
     <div>
+      <UserInfo />
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} />

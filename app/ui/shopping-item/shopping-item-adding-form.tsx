@@ -37,21 +37,35 @@ export default function ShoppingItemAddingForm({
       }}
     >
       <h2
-        style={{ color: "darkblue", fontWeight: "bold", marginBottom: "10px" }}
+        style={{
+          color: "darkblue",
+          fontWeight: "bold",
+          marginBottom: "10px",
+          textAlign: "center",
+          fontSize: "24px",
+        }}
       >
         Add Shopping Item
       </h2>
-      <div style={{ marginBottom: "8px" }}>
-        <label>
+      <div style={{ marginBottom: "16px" }}>
+        <label style={{ display: "block", marginBottom: "8px" }}>
           Item Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter name"
-            style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
-          />
         </label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter name"
+          style={{
+            width: "100%",
+            padding: "12px 8px",
+            fontSize: "16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+            appearance: "none",
+          }}
+        />
       </div>
       <div style={{ marginBottom: "8px" }}>
         {/* <label>
@@ -97,6 +111,27 @@ export default function ShoppingItemAddingForm({
             style={{ padding: "16px 8px", fontSize: "16px" }}
           >
             Aldi
+          </option>
+          <option value="AH" style={{ padding: "16px 8px", fontSize: "16px" }}>
+            AH
+          </option>
+          <option
+            value="Delhaize"
+            style={{ padding: "16px 8px", fontSize: "16px" }}
+          >
+            Delhaize
+          </option>
+          <option
+            value="Turk Market"
+            style={{ padding: "16px 8px", fontSize: "16px" }}
+          >
+            Turk Market
+          </option>
+          <option
+            value="Action"
+            style={{ padding: "16px 8px", fontSize: "16px" }}
+          >
+            Action
           </option>
         </select>
       </div>
