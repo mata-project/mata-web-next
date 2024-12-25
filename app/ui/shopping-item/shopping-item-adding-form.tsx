@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { ShoppingItem } from "../supermarkets-list/supermarketsListComponent";
-import router from "next/router";
 import { Item } from "../item/item";
 
 export default function ShoppingItemAddingForm({
@@ -10,17 +8,18 @@ export default function ShoppingItemAddingForm({
   addItem: (item: Item) => void;
 }) {
   const [name, setName] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>(1);
+  //const [quantity, setQuantity] = useState<number | string>();
   const [supermarket, setSupermarket] = useState<string>("");
 
   const handleAddItem = () => {
     if (name) {
       const item: Item = {
         itemName: name,
+        supermarket,
       };
       addItem(item);
       setName("");
-      setQuantity(1);
+      //setQuantity("");
       setSupermarket("");
     } else {
       alert("Please fill all fields before adding an item.");
@@ -49,39 +48,57 @@ export default function ShoppingItemAddingForm({
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            placeholder="Enter name"
             style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
           />
         </label>
       </div>
       <div style={{ marginBottom: "8px" }}>
-        <label>
+        {/* <label>
           Quantity:
           <input
             type="number"
             // value={quantity}
             // onChange={(e) => setQuantity(Number(e.target.value))}
             min="1"
+            placeholder="Enter quantity"
             style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
           />
-        </label>
+        </label> */}
       </div>
       <div style={{ marginBottom: "16px" }}>
-        <label>
+        <label style={{ display: "block", marginBottom: "8px" }}>
           Supermarket:
-          <select
-            // value={supermarket}
-            // onChange={(e) => setSupermarket(e.target.value)}
-            style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
-          >
-            <option value="">Select a supermarket</option>
-            <option value="Lidl">Lidl</option>
-            <option value="Aldi">Aldi</option>
-            {/* <option value="AH">AH</option>
-            <option value="Turko">Turko</option>
-            <option value="Carrefour">Carrefour</option>
-            <option value="Action">Action</option> */}
-          </select>
         </label>
+        <select
+          value={supermarket}
+          onChange={(e) => setSupermarket(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px 8px",
+            fontSize: "16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+            appearance: "none",
+          }}
+        >
+          <option value="" style={{ padding: "16px 8px", fontSize: "16px" }}>
+            Select a supermarket
+          </option>
+          <option
+            value="Lidl"
+            style={{ padding: "16px 8px", fontSize: "16px" }}
+          >
+            Lidl
+          </option>
+          <option
+            value="Aldi"
+            style={{ padding: "16px 8px", fontSize: "16px" }}
+          >
+            Aldi
+          </option>
+        </select>
       </div>
       <button
         onClick={handleAddItem}
