@@ -24,7 +24,13 @@ export default function SupermarketsList({ items }: SupermarketsListProps) {
       }}
     >
       <h2
-        style={{ color: "darkblue", fontWeight: "bold", marginBottom: "10px" }}
+        style={{
+          color: "darkblue",
+          fontWeight: "bold",
+          marginBottom: "10px",
+          textAlign: "center",
+          fontSize: "24px", // Increased font size
+        }}
       >
         Supermarkets
       </h2>
