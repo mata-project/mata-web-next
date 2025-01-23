@@ -8,6 +8,8 @@ import UserInfo from "../user-info/userInfo";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
+  const [capital, setCapital] = useState<any[]>([]); // State to hold fetched countries
+  const [user, setUser] = useState<any[]>([]);
 
   const addItem = (newItem: Item) => {
     setItems((prev) => [...prev, newItem]);
@@ -22,9 +24,52 @@ export default function HomeComponent() {
     );
   };
 
+  // New function to fetch countries data
+  const fetchCapital = async () => {
+    const response = await fetch("https://countries.trevorblades.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          {
+            country(code: "BE") {
+              capital
+            }
+          }
+        `,
+      }),
+    });
+    const data = await response.json();
+    setCapital(data?.data?.country?.capital); // Update state with fetched countries
+    console.log(data);
+  };
+
+  async function testButtonClicked(event: any) {
+    fetchCapital();
+    console.log("test button clicked");
+  }
+
   return (
     <div>
       <UserInfo />
+      <button
+        onClick={testButtonClicked}
+        style={{
+          backgroundColor: "blue",
+          color: "white",
+          padding: "10px 20px",
+          borderRadius: "5px",
+          border: "none",
+          cursor: "pointer",
+          display: "block",
+          margin: "auto",
+        }}
+      >
+        Test Button
+      </button>
+      <p>Capital: {capital}</p>
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} deleteItem={deleteItem} />
