@@ -5,11 +5,12 @@ import SupermarketsList from "../supermarkets-list/supermarketsListComponent";
 import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
+import { getSessionValue } from "../../lib/actions";
+import { logOut } from "../../lib/actions";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
   const [capital, setCapital] = useState<any[]>([]); // State to hold fetched countries
-  const [user, setUser] = useState<any[]>([]);
 
   const addItem = (newItem: Item) => {
     setItems((prev) => [...prev, newItem]);
@@ -48,6 +49,8 @@ export default function HomeComponent() {
 
   async function testButtonClicked(event: any) {
     fetchCapital();
+    const session = await getSessionValue();
+    console.log(session);
     console.log("test button clicked");
   }
 

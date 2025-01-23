@@ -1,7 +1,10 @@
 "use server";
 
-import { signIn } from "@/auth";
+import { getUser, signIn } from "@/auth";
 import { AuthError } from "next-auth";
+import { cookies } from "next/headers";
+import { createSession, decrypt, deleteSession } from "./session";
+import { redirect } from "next/navigation";
 
 // ...
 
@@ -10,6 +13,10 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
+    const user = getUser("mock@mock.com");
+    console.log(user.id);
+
+    await createSession(user.id);
     await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
@@ -22,4 +29,14 @@ export async function authenticate(
     }
     throw error;
   }
+}
+export async function getSessionValue() {
+  console.log("test session log");
+
+  const sessionCookie = (await cookies()).get("session");
+  if (!sessionCookie) return null;
+  const result = await decrypt(sessionCookie.value);
+  console.log(result?.userId);
+
+  return result?.userId;
 }

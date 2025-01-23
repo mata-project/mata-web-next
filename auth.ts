@@ -2,10 +2,12 @@ import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+import { createSession } from "./app/lib/session";
 
 // TODO get values from backend
-function getUser(email: string): any {
+export function getUser(email: string): any {
   return {
+    id: "111",
     email: "mock@mock.com",
     password: "password",
   };
@@ -25,7 +27,9 @@ export const { auth, signIn, signOut } = NextAuth({
           const user = getUser(email);
           if (!user) return null;
           const passwordsMatch = password === user.password;
-          if (passwordsMatch) return user;
+          if (passwordsMatch) {
+            return user;
+          }
         }
 
         console.log("Invalid credentials");
