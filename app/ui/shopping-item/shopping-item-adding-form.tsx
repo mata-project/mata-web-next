@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Item } from "../item/item";
 
 export default function ShoppingItemAddingForm({
@@ -10,6 +10,39 @@ export default function ShoppingItemAddingForm({
   const [name, setName] = useState<string>("");
   //const [quantity, setQuantity] = useState<number | string>();
   const [supermarket, setSupermarket] = useState<string>("");
+  const [markets, setMarkets] = useState<any[]>([]);
+
+  // Add useEffect to fetch markets on component mount
+  useEffect(() => {
+    getMarkets();
+  }, []);
+
+  const getMarkets = async () => {
+    try {
+      const response = await fetch("http://3.253.198.9:3000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+          query{
+            markets{
+              id 
+              name
+            }
+        }
+          `,
+        }),
+      });
+      const data = await response.json();
+      setMarkets(data.data.markets);
+      console.log("markets are fetched");
+    } catch (error) {
+      console.log("Error fetching markets:", error);
+      throw error;
+    }
+  };
 
   const handleAddItem = () => {
     if (name) {
@@ -100,39 +133,15 @@ export default function ShoppingItemAddingForm({
           <option value="" style={{ padding: "16px 8px", fontSize: "16px" }}>
             Select a supermarket
           </option>
-          <option
-            value="Lidl"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Lidl
-          </option>
-          <option
-            value="Aldi"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Aldi
-          </option>
-          <option value="AH" style={{ padding: "16px 8px", fontSize: "16px" }}>
-            AH
-          </option>
-          <option
-            value="Delhaize"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Delhaize
-          </option>
-          <option
-            value="Turk Market"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Turk Market
-          </option>
-          <option
-            value="Action"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Action
-          </option>
+          {markets.map((market) => (
+            <option
+              key={market.id}
+              value={market.name}
+              style={{ padding: "16px 8px", fontSize: "16px" }}
+            >
+              {market.name}
+            </option>
+          ))}
         </select>
       </div>
       <button

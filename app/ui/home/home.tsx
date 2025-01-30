@@ -47,6 +47,7 @@ export default function HomeComponent() {
     console.log(data);
   };
 
+  //FIXME remove it after test
   async function testButtonClicked(event: any) {
     fetchCapital();
     const session = await getSessionValue();
@@ -57,7 +58,8 @@ export default function HomeComponent() {
   return (
     <div>
       <UserInfo />
-      <button
+      //FIXME remove it after test
+      {/* <button
         onClick={testButtonClicked}
         style={{
           backgroundColor: "blue",
@@ -72,7 +74,7 @@ export default function HomeComponent() {
       >
         Test Button
       </button>
-      <p>Capital: {capital}</p>
+      <p>Capital: {capital}</p> */}
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} deleteItem={deleteItem} />
