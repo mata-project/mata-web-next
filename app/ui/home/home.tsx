@@ -1,18 +1,61 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShoppingItemAddingForm from "../shopping-item/shopping-item-adding-form";
 import SupermarketsList from "../supermarkets-list/supermarketsListComponent";
 import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
 import { getSessionValue } from "../../lib/actions";
-import { logOut } from "../../lib/actions";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
   const [capital, setCapital] = useState<any[]>([]); // State to hold fetched countries
 
-  const addItem = (newItem: Item) => {
+  // Add useEffect to fetch markets on component mount
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  // TODO encapsulate data fetch ops
+  const getItems = async () => {
+    try {
+      const response = await fetch("http://3.253.198.9:3000/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+          query {
+            shoppingItems(userId: 1) {
+            id
+            name
+            market{
+            id 
+            name
+            }
+          }
+        }
+          `,
+        }),
+      });
+      const data = await response.json();
+      setItems(
+        data.data.shoppingItems.map((item: any) => ({
+          itemName: item.name,
+          supermarketName: item.market.name,
+          supermarketId: item.market.id,
+          id: item.id,
+        }))
+      );
+      console.log(data.data.shoppingItems);
+      console.log("items are fetched");
+    } catch (error) {
+      console.log("Error fetching markets:", error);
+      throw error;
+    }
+  };
+  const addItem = async (newItem: Item) => {
     setItems((prev) => [...prev, newItem]);
   };
 
@@ -25,7 +68,7 @@ export default function HomeComponent() {
     );
   };
 
-  // New function to fetch countries data
+  //FIXME remove it after test
   const fetchCapital = async () => {
     const response = await fetch("https://countries.trevorblades.com", {
       method: "POST",
@@ -58,7 +101,7 @@ export default function HomeComponent() {
   return (
     <div>
       <UserInfo />
-      //FIXME remove it after test
+      {/* FIXME remove it after test */}
       {/* <button
         onClick={testButtonClicked}
         style={{
