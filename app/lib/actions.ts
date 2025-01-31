@@ -3,7 +3,7 @@
 import { getUser, signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { cookies } from "next/headers";
-import { createSession, decrypt, deleteSession } from "./session";
+import { createSession, decrypt } from "./session";
 import { redirect } from "next/navigation";
 
 // ...
@@ -13,9 +13,7 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    const user = getUser("mock@mock.com");
-    console.log(user.id);
-
+    const user = await getUser("mock@mock.com", "passwword");
     await createSession(user.id);
     await signIn("credentials", formData);
   } catch (error) {

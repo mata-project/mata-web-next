@@ -2,32 +2,59 @@ import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import { createSession } from "./app/lib/session";
+import { User } from "@/app/ui/user/user";
 
-// TODO get values from backend
-export function getUser(email: string): any {
-  return {
-    id: "111",
-    email: "mock@mock.com",
-    password: "password",
-  };
+export async function getUser(email: string, password: string): Promise<User> {
+  try {
+    const response = await fetch("http://18.203.185.97:3000/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+        query {
+          user(email: "${email}", password: "${password}") {
+            isUser
+            id
+            name
+          }
+        }
+        `,
+      }),
+    });
+    const data = await response.json();
+    console.log(data.data.user);
+    if (data.data.user) {
+      return {
+        id: data.data.user.id,
+        name: data.data.user.name,
+        isUser: data.data.user.isUser,
+      };
+    }
+  } catch (error) {
+    console.log("Error fetching users:", error);
+    throw error;
+  }
 }
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({
+            email: z.string().email(),
+            password: z.string().min(6),
+          })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          const user = getUser(email);
+          const user = await getUser(email, password);
           if (!user) return null;
-          const passwordsMatch = password === user.password;
-          if (passwordsMatch) {
+          if (user.isUser) {
             return user;
           }
         }

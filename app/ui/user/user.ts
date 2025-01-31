@@ -1,4 +1,4 @@
-export type Item = {
+export type User = {
   id: number;
   //   quantity: number;
   name?: string;
