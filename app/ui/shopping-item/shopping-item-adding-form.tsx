@@ -9,7 +9,7 @@ export default function ShoppingItemAddingForm({
 }) {
   const [name, setName] = useState<string>("");
   //const [quantity, setQuantity] = useState<number | string>();
-  const [supermarket, setSupermarket] = useState<string>("");
+  const [supermarket, setSupermarket] = useState<any>({});
   const [markets, setMarkets] = useState<any[]>([]);
 
   // Add useEffect to fetch markets on component mount
@@ -19,7 +19,7 @@ export default function ShoppingItemAddingForm({
 
   const getMarkets = async () => {
     try {
-      const response = await fetch("http://3.253.198.9:3000/graphql", {
+      const response = await fetch("http://18.203.185.97:3000/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,13 +47,16 @@ export default function ShoppingItemAddingForm({
   const handleAddItem = () => {
     if (name) {
       const item: Item = {
-        itemName: name,
-        supermarket,
+        name: name,
+        market: {
+          id: supermarket.id,
+          name: supermarket.name,
+        },
       };
       addItem(item);
       setName("");
       //setQuantity("");
-      setSupermarket("");
+      setSupermarket({});
     } else {
       alert("Please fill all fields before adding an item.");
     }
@@ -118,8 +121,13 @@ export default function ShoppingItemAddingForm({
           Supermarket:
         </label>
         <select
-          value={supermarket}
-          onChange={(e) => setSupermarket(e.target.value)}
+          value={supermarket.name || ""}
+          onChange={(e) =>
+            setSupermarket({
+              name: e.target.value,
+              id: markets.find((m) => m.name === e.target.value)?.id || "",
+            })
+          }
           style={{
             width: "100%",
             padding: "12px 8px",

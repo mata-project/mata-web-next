@@ -1,6 +1,7 @@
 "use client";
 
 import { Item } from "../item/item";
+import { Market } from "../market/market";
 
 type SupermarketTile = {
   name: string;
@@ -9,7 +10,7 @@ type SupermarketTile = {
 
 type SupermarketsListProps = {
   items: Item[];
-  deleteItem: (supermarketName: string, itemName: string) => void; // Add this line
+  deleteItem: (market: Market, item: Item) => void;
 };
 
 export default function SupermarketsList({
@@ -17,6 +18,8 @@ export default function SupermarketsList({
   deleteItem,
 }: SupermarketsListProps) {
   const supermarketTiles = getSuperMarketTiles(items);
+  console.log(supermarketTiles);
+
   return (
     <div
       style={{
@@ -69,7 +72,7 @@ export default function SupermarketsList({
                     className="shopping-item-name"
                     style={{ color: "blue", fontWeight: "bold", margin: 0 }}
                   >
-                    {item.itemName}
+                    {item.name}
                   </h2>
                   <button
                     style={{
@@ -80,7 +83,7 @@ export default function SupermarketsList({
                       borderRadius: "4px",
                       cursor: "pointer",
                     }}
-                    onClick={() => deleteItem(supermarket.name, item.itemName)}
+                    onClick={() => deleteItem(item.market, item)}
                   >
                     Delete
                   </button>
@@ -94,14 +97,14 @@ export default function SupermarketsList({
   );
 }
 
-//FIXME include database
 function getSuperMarketTiles(items: Item[]): SupermarketTile[] {
   // Group items by supermarket
   const groupedItems = items.reduce((acc, item) => {
-    if (!acc[item.supermarket]) {
-      acc[item.supermarket] = [];
+    const supermarketName = item.market.name;
+    if (!acc[supermarketName]) {
+      acc[supermarketName] = [];
     }
-    acc[item.supermarket].push(item);
+    acc[supermarketName].push(item);
     return acc;
   }, {} as Record<string, Item[]>);
 
