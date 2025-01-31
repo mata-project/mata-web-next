@@ -10,7 +10,7 @@ type SupermarketTile = {
 
 type SupermarketsListProps = {
   items: Item[];
-  deleteItem: (market: Market, item: Item) => void;
+  deleteItem: (item: Item) => void;
 };
 
 export default function SupermarketsList({
@@ -83,7 +83,7 @@ export default function SupermarketsList({
                       borderRadius: "4px",
                       cursor: "pointer",
                     }}
-                    onClick={() => deleteItem(item.market, item)}
+                    onClick={() => deleteItem(item)}
                   >
                     Delete
                   </button>

@@ -88,7 +88,7 @@ export default function HomeComponent() {
     }
   };
 
-  const deleteItem = async (market: Market, item: Item) => {
+  const deleteItem = async (item: Item) => {
     //console.log(newItem);
     try {
       const response = await fetch("http://18.203.185.97:3000/graphql", {
