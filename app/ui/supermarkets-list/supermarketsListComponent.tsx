@@ -18,7 +18,6 @@ export default function SupermarketsList({
   deleteItem,
 }: SupermarketsListProps) {
   const supermarketTiles = getSuperMarketTiles(items);
-  console.log(supermarketTiles);
 
   return (
     <div

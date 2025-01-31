@@ -6,10 +6,10 @@ import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
 import { getSessionValue } from "../../lib/actions";
-import { Market } from "../market/market";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
+  const [usersId, setUsersId] = useState<Number>(0);
 
   // Add useEffect to fetch markets on component mount
   useEffect(() => {
@@ -18,6 +18,15 @@ export default function HomeComponent() {
 
   // TODO encapsulate data fetch ops
   const getItems = async () => {
+    let userId = await getSessionValue();
+
+    // Add retry mechanism for undefined userId
+    if (!userId) {
+      // Wait for session to be available
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      userId = await getSessionValue();
+    }
+
     try {
       const response = await fetch("http://18.203.185.97:3000/graphql", {
         method: "POST",
@@ -27,7 +36,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
           query {
-            shoppingItems(userId: 1) {
+            shoppingItems(userId: "${userId}") {
             id
             name
             market{
@@ -40,6 +49,7 @@ export default function HomeComponent() {
         }),
       });
       const data = await response.json();
+
       setItems(
         data.data.shoppingItems.map((item: any) => ({
           id: item.id,
@@ -50,15 +60,15 @@ export default function HomeComponent() {
           },
         }))
       );
-      console.log(data.data.shoppingItems);
       console.log("items are fetched");
     } catch (error) {
       console.log("Error fetching markets:", error);
       throw error;
     }
   };
+
   const addItem = async (newItem: Item) => {
-    console.log(newItem);
+    const userId = await getSessionValue();
     try {
       const response = await fetch("http://18.203.185.97:3000/graphql", {
         method: "POST",
@@ -68,7 +78,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
             mutation {
-                addShoppingItem(userId: "1", 
+                addShoppingItem(userId: ${userId}, 
                 marketId: "${newItem.market.id}", 
                 name: "${newItem.name}") {
                 name
@@ -78,7 +88,6 @@ export default function HomeComponent() {
         }),
       });
       const data = await response.json();
-      console.log(data);
 
       getItems();
       console.log("item added");
@@ -89,7 +98,7 @@ export default function HomeComponent() {
   };
 
   const deleteItem = async (item: Item) => {
-    //console.log(newItem);
+    const userId = await getSessionValue();
     try {
       const response = await fetch("http://18.203.185.97:3000/graphql", {
         method: "POST",
@@ -99,7 +108,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
             mutation {
-            deleteShoppingItem(userId: 1, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
+            deleteShoppingItem(userId: ${userId}, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
               __typename
               }
             }
@@ -107,49 +116,18 @@ export default function HomeComponent() {
         }),
       });
       const data = await response.json();
-      console.log(data);
 
       getItems();
-      console.log("item added");
+      console.log("item deleted");
     } catch (error) {
       console.log("Error fetching markets:", error);
       throw error;
     }
-    // setItems((prev) =>
-    //   prev.filter(
-    //     (prevItem) =>
-    //       !(prevItem.name === item.name && prevItem.market.name === market.name)
-    //   )
-    // );
   };
-
-  //FIXME remove it after test
-  async function testButtonClicked(event: any) {
-    const session = await getSessionValue();
-    console.log(session);
-    console.log("test button clicked");
-  }
 
   return (
     <div>
       <UserInfo />
-      {/* FIXME remove it after test */}
-      {/* <button
-        onClick={testButtonClicked}
-        style={{
-          backgroundColor: "blue",
-          color: "white",
-          padding: "10px 20px",
-          borderRadius: "5px",
-          border: "none",
-          cursor: "pointer",
-          display: "block",
-          margin: "auto",
-        }}
-      >
-        Test Button
-      </button>
-      <p>Capital: {capital}</p> */}
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} deleteItem={deleteItem} />

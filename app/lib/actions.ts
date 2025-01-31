@@ -13,9 +13,35 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    const user = await getUser("mock@mock.com", "passwword");
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    // First, try to sign in with credentials
+    const signInResult = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (signInResult?.error) {
+      throw new AuthError(signInResult.error);
+    }
+
+    // Get user after successful sign-in
+    const user = await getUser(email, password);
+
+    if (!user?.id) {
+      throw new Error("User not found");
+    }
+
+    // Create session after successful authentication
     await createSession(user.id);
-    await signIn("credentials", formData);
+
+    // Add a small delay to ensure session is set
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Redirect after successful authentication
+    redirect("/home");
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
@@ -28,13 +54,21 @@ export async function authenticate(
     throw error;
   }
 }
-export async function getSessionValue() {
-  console.log("test session log");
+export async function getSessionValue(): Promise<number | undefined> {
+  let sessionCookie;
+  let retries = 3;
 
-  const sessionCookie = (await cookies()).get("session");
-  if (!sessionCookie) return null;
+  while (retries > 0) {
+    sessionCookie = (await cookies()).get("session");
+    if (sessionCookie) break;
+
+    // Wait for session to be set
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    retries--;
+  }
+
+  if (!sessionCookie) return undefined;
+
   const result = await decrypt(sessionCookie.value);
-  console.log(result?.userId);
-
-  return result?.userId;
+  return result?.userId as number;
 }

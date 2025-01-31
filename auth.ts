@@ -4,7 +4,10 @@ import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { User } from "@/app/ui/user/user";
 
-export async function getUser(email: string, password: string): Promise<User> {
+export async function getUser(
+  email: string,
+  password: string
+): Promise<User | undefined> {
   try {
     const response = await fetch("http://18.203.185.97:3000/graphql", {
       method: "POST",

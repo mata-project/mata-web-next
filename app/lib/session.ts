@@ -23,8 +23,8 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: number) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+export async function createSession(userId: number | undefined) {
+  const expiresAt = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ userId, expiresAt });
   const cookieStore = await cookies();
 
@@ -35,4 +35,7 @@ export async function createSession(userId: number) {
     sameSite: "lax",
     path: "/",
   });
+
+  // Force cookie to be set immediately
+  await new Promise((resolve) => setTimeout(resolve, 100));
 }
