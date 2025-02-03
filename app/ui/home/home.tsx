@@ -35,7 +35,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
           query {
-            shoppingItems(userId: "${userId}") {
+            shoppingItems(userId: ${userId}) {
             id
             name
             market{
