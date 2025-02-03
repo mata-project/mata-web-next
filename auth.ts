@@ -10,6 +10,7 @@ export async function getUser(
   try {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
       },
