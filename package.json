@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev --turbo",
-    "start": "next start"
+    "dev": "next dev -p 3001 --turbo",
+    "start": "next start -p 3001"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

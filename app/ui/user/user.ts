@@ -3,4 +3,6 @@ export type User = {
   //   quantity: number;
   name?: string;
   isUser?: boolean;
+  email: string;
+  password: string;
 };

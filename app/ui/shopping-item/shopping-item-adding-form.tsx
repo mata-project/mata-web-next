@@ -19,7 +19,7 @@ export default function ShoppingItemAddingForm({
 
   const getMarkets = async () => {
     try {
-      const response = await fetch("http://18.203.185.97:3000/graphql", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

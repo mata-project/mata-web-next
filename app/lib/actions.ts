@@ -35,7 +35,7 @@ export async function authenticate(
     }
 
     // Create session after successful authentication
-    await createSession(user.id);
+    await createSession(Number(user.id));
 
     // Add a small delay to ensure session is set
     await new Promise((resolve) => setTimeout(resolve, 500));

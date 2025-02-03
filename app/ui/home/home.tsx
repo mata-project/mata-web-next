@@ -26,9 +26,8 @@ export default function HomeComponent() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       userId = await getSessionValue();
     }
-
     try {
-      const response = await fetch("http://18.203.185.97:3000/graphql", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +69,7 @@ export default function HomeComponent() {
   const addItem = async (newItem: Item) => {
     const userId = await getSessionValue();
     try {
-      const response = await fetch("http://18.203.185.97:3000/graphql", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +99,7 @@ export default function HomeComponent() {
   const deleteItem = async (item: Item) => {
     const userId = await getSessionValue();
     try {
-      const response = await fetch("http://18.203.185.97:3000/graphql", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
