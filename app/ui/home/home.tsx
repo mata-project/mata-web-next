@@ -23,7 +23,7 @@ export default function HomeComponent() {
     // Add retry mechanism for undefined userId
     if (!userId) {
       // Wait for session to be available
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      //await new Promise((resolve) => setTimeout(resolve, 1000));
       userId = await getSessionValue();
     }
     try {
