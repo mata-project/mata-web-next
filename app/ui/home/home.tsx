@@ -29,7 +29,6 @@ export default function HomeComponent() {
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -48,7 +47,22 @@ export default function HomeComponent() {
           `,
         }),
       });
-      const data = await response.json();
+
+      // Add response validation
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Try to parse the response as text first for debugging
+      const text = await response.text();
+      console.log("Raw response:", text);
+
+      // Then parse as JSON
+      const data = JSON.parse(text);
+
+      if (!data?.data?.shoppingItems) {
+        throw new Error("Invalid response structure");
+      }
 
       setItems(
         data.data.shoppingItems.map((item: any) => ({
@@ -62,8 +76,8 @@ export default function HomeComponent() {
       );
       console.log("items are fetched");
     } catch (error) {
-      console.log("Error fetching markets:", error);
-      throw error;
+      console.log("Error fetching items:", error);
+      setItems([]); // Set empty array as fallback
     }
   };
 
@@ -72,7 +86,6 @@ export default function HomeComponent() {
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -88,13 +101,20 @@ export default function HomeComponent() {
           `,
         }),
       });
-      const data = await response.json();
+
+      // Add response validation
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const text = await response.text();
+      console.log("Raw response:", text);
+      const data = JSON.parse(text);
 
       getItems();
       console.log("item added");
     } catch (error) {
-      console.log("Error fetching markets:", error);
-      throw error;
+      console.log("Error adding item:", error);
     }
   };
 
@@ -103,7 +123,6 @@ export default function HomeComponent() {
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -117,13 +136,20 @@ export default function HomeComponent() {
           `,
         }),
       });
-      const data = await response.json();
+
+      // Add response validation
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const text = await response.text();
+      console.log("Raw response:", text);
+      const data = JSON.parse(text);
 
       getItems();
       console.log("item deleted");
     } catch (error) {
-      console.log("Error fetching markets:", error);
-      throw error;
+      console.log("Error deleting item:", error);
     }
   };
 
