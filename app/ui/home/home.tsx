@@ -35,7 +35,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
           query {
-            shoppingItems(userId: ${userId}) {
+            shoppingItems(userId: 1) {
             id
             name
             market{
@@ -92,7 +92,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
             mutation {
-                addShoppingItem(userId: ${userId}, 
+                addShoppingItem(userId: 1, 
                 marketId: "${newItem.market.id}", 
                 name: "${newItem.name}") {
                 name
@@ -129,7 +129,7 @@ export default function HomeComponent() {
         body: JSON.stringify({
           query: `
             mutation {
-            deleteShoppingItem(userId: ${userId}, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
+            deleteShoppingItem(userId: 1, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
               __typename
               }
             }
