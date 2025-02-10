@@ -1,3 +1,5 @@
+import { getSessionValue } from "./actions";
+
 export async function fetchMarkets() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
@@ -26,6 +28,8 @@ export async function fetchMarkets() {
 }
 
 export async function fetchShoppingItems() {
+  const userId = await getSessionValue();
+  console.log(`userid ${userId}`);
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
       method: "POST",
@@ -35,7 +39,7 @@ export async function fetchShoppingItems() {
       body: JSON.stringify({
         query: `
           query {
-            shoppingItems(userId: 1) {
+            shoppingItems(userId: ${userId}) {
             id
             name
             market{
