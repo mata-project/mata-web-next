@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Item } from "../item/item";
+import { fetchMarkets } from "../../lib/data";
 
 export default function ShoppingItemAddingForm({
   addItem,
@@ -19,45 +20,12 @@ export default function ShoppingItemAddingForm({
 
   const getMarkets = async () => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-          query{
-            markets{
-              id 
-              name
-            }
-        }
-          `,
-        }),
-      });
-
-      // Add response validation
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      // Try to parse the response as text first for debugging
-      const text = await response.text();
-      console.log("Raw response:", text);
-
-      // Then parse as JSON
-      const data = JSON.parse(text);
-
-      if (!data?.data?.markets) {
-        throw new Error("Invalid response structure");
-      }
-
-      setMarkets(data.data.markets);
+      const markets = await fetchMarkets();
+      setMarkets(markets);
       console.log("markets are fetched");
     } catch (error) {
       console.log("Error fetching markets:", error);
-      // You might want to set some error state here
-      setMarkets([]); // Set empty array as fallback
+      setMarkets([]);
     }
   };
 
