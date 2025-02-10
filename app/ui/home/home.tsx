@@ -6,7 +6,11 @@ import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
 import { getSessionValue } from "../../lib/actions";
-import { addShoppingItem, fetchShoppingItems } from "../../lib/data";
+import {
+  addShoppingItem,
+  deleteShoppingItem,
+  fetchShoppingItems,
+} from "../../lib/data";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
@@ -40,33 +44,8 @@ export default function HomeComponent() {
   };
 
   const deleteItem = async (item: Item) => {
-    const userId = await getSessionValue();
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-            mutation {
-            deleteShoppingItem(userId: 1, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
-              __typename
-              }
-            }
-          `,
-        }),
-      });
-
-      // Add response validation
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const text = await response.text();
-      console.log("Raw response:", text);
-      const data = JSON.parse(text);
-
+      await deleteShoppingItem(item);
       getItems();
       console.log("item deleted");
     } catch (error) {

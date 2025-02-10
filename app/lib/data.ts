@@ -93,3 +93,31 @@ export async function addShoppingItem(item: Item) {
     throw error;
   }
 }
+
+export async function deleteShoppingItem(item: Item) {
+  const userId = await getSessionValue();
+
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+           mutation {
+            deleteShoppingItem(userId: ${userId}, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
+              __typename
+              }
+            }
+        `,
+      }),
+    });
+
+    const { data } = await response.json();
+    return data.deleteShoppingItem;
+  } catch (error) {
+    console.error("Error deleting shopping item:", error);
+    throw error;
+  }
+}
