@@ -6,7 +6,7 @@ import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
 import { getSessionValue } from "../../lib/actions";
-import { fetchShoppingItems } from "../../lib/data";
+import { addShoppingItem, fetchShoppingItems } from "../../lib/data";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
@@ -30,35 +30,8 @@ export default function HomeComponent() {
   };
 
   const addItem = async (newItem: Item) => {
-    const userId = await getSessionValue();
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || "", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-            mutation {
-                addShoppingItem(userId: 1, 
-                marketId: "${newItem.market.id}", 
-                name: "${newItem.name}") {
-                name
-              }
-            }
-          `,
-        }),
-      });
-
-      // Add response validation
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const text = await response.text();
-      console.log("Raw response:", text);
-      const data = JSON.parse(text);
-
+      await addShoppingItem(newItem);
       getItems();
       console.log("item added");
     } catch (error) {
