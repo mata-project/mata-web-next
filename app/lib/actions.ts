@@ -1,10 +1,11 @@
 "use server";
 
-import { getUser, signIn } from "@/auth";
+import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { cookies } from "next/headers";
 import { createSession, decrypt } from "./session";
 import { redirect } from "next/navigation";
+import { getUser } from "./data";
 
 // ...
 

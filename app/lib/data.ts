@@ -1,3 +1,4 @@
+import { User } from "next-auth";
 import { Item } from "../ui/item/item";
 import { getSessionValue } from "./actions";
 
@@ -119,5 +120,45 @@ export async function deleteShoppingItem(item: Item) {
   } catch (error) {
     console.error("Error deleting shopping item:", error);
     throw error;
+  }
+}
+
+export async function getUser(
+  email: string,
+  password: string
+): Promise<User | undefined> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+          user(email: "${email}", password: "${password}") {
+            isUser
+            id
+            name
+            email
+          }
+        }
+        `,
+      }),
+    });
+
+    const data = await response.json();
+    console.log(data);
+
+    if (data.data.user && data.data.user.isUser) {
+      return {
+        id: data.data.user.id,
+        name: data.data.user.name,
+        email: data.data.user.email,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return undefined;
   }
 }
