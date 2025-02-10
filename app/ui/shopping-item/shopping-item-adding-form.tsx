@@ -30,7 +30,7 @@ export default function ShoppingItemAddingForm({
   };
 
   const handleAddItem = () => {
-    if (name) {
+    if (name && supermarket.id) {
       const item: Item = {
         name: name,
         market: {
