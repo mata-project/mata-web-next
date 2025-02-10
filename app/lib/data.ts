@@ -24,3 +24,34 @@ export async function fetchMarkets() {
     throw error;
   }
 }
+
+export async function fetchShoppingItems() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
+          query {
+            shoppingItems(userId: 1) {
+            id
+            name
+            market{
+            id 
+            name
+            }
+          }
+        }
+        `,
+      }),
+    });
+
+    const { data } = await response.json();
+    return data.shoppingItems;
+  } catch (error) {
+    console.error("Error fetching shopping items:", error);
+    throw error;
+  }
+}
