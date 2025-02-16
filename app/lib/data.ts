@@ -132,6 +132,8 @@ export async function getUser(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-apollo-operation-name": "Login",
+        "apollo-require-preflight": "true",
       },
       body: JSON.stringify({
         query: `
