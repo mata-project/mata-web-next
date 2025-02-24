@@ -38,9 +38,6 @@ export async function authenticate(
     // Create session after successful authentication
     await createSession(Number(user.id));
 
-    // Add a small delay to ensure session is set
-    // await new Promise((resolve) => setTimeout(resolve, 500));
-
     // Redirect after successful authentication
     redirect("/home");
   } catch (error) {
@@ -62,9 +59,6 @@ export async function getSessionValue(): Promise<number | undefined> {
   while (retries > 0) {
     sessionCookie = (await cookies()).get("session");
     if (sessionCookie) break;
-
-    // Wait for session to be set
-    // await new Promise((resolve) => setTimeout(resolve, 500));
     retries--;
   }
 

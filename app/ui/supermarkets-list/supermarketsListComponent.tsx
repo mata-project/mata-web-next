@@ -1,7 +1,6 @@
 "use client";
 
 import { Item } from "../item/item";
-import { Market } from "../market/market";
 
 type SupermarketTile = {
   name: string;
@@ -35,7 +34,7 @@ export default function SupermarketsList({
           fontWeight: "bold",
           marginBottom: "10px",
           textAlign: "center",
-          fontSize: "24px", // Increased font size
+          fontSize: "24px",
         }}
       >
         Supermarkets

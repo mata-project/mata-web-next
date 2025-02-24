@@ -9,7 +9,6 @@ export default function ShoppingItemAddingForm({
   addItem: (item: Item) => void;
 }) {
   const [name, setName] = useState<string>("");
-  //const [quantity, setQuantity] = useState<number | string>();
   const [supermarket, setSupermarket] = useState<any>({});
   const [markets, setMarkets] = useState<any[]>([]);
 
@@ -40,7 +39,6 @@ export default function ShoppingItemAddingForm({
       };
       addItem(item);
       setName("");
-      //setQuantity("");
       setSupermarket({});
     } else {
       alert("Please fill all fields before adding an item.");
@@ -88,19 +86,7 @@ export default function ShoppingItemAddingForm({
           }}
         />
       </div>
-      <div style={{ marginBottom: "8px" }}>
-        {/* <label>
-          Quantity:
-          <input
-            type="number"
-            // value={quantity}
-            // onChange={(e) => setQuantity(Number(e.target.value))}
-            min="1"
-            placeholder="Enter quantity"
-            style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
-          />
-        </label> */}
-      </div>
+      <div style={{ marginBottom: "8px" }}></div>
       <div style={{ marginBottom: "16px" }}>
         <label style={{ display: "block", marginBottom: "8px" }}>
           Supermarket:

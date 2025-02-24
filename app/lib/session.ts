@@ -35,7 +35,4 @@ export async function createSession(userId: number | undefined) {
     sameSite: "lax",
     path: "/",
   });
-
-  // Force cookie to be set immediately
-  //await new Promise((resolve) => setTimeout(resolve, 100));
 }

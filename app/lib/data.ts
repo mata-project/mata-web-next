@@ -2,6 +2,7 @@ import { User } from "next-auth";
 import { Item } from "../ui/item/item";
 import { getSessionValue } from "./actions";
 
+// FIXME abstract fetch params.
 export async function fetchMarkets() {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
@@ -31,7 +32,6 @@ export async function fetchMarkets() {
 
 export async function fetchShoppingItems() {
   const userId = await getSessionValue();
-  console.log(`userid ${userId}`);
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`, {
       method: "POST",
@@ -150,7 +150,6 @@ export async function getUser(
     });
 
     const data = await response.json();
-    console.log(data);
 
     if (data.data.user && data.data.user.isUser) {
       return {

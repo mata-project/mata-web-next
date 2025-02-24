@@ -5,7 +5,6 @@ import SupermarketsList from "../supermarkets-list/supermarketsListComponent";
 import { Item } from "../item/item";
 import Banner from "../banner/banner";
 import UserInfo from "../user-info/userInfo";
-import { getSessionValue } from "../../lib/actions";
 import {
   addShoppingItem,
   deleteShoppingItem,
@@ -14,14 +13,12 @@ import {
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
-  const [usersId, setUsersId] = useState<Number>(0);
 
   // Add useEffect to fetch markets on component mount
   useEffect(() => {
     getItems();
   }, []);
 
-  // TODO encapsulate data fetch ops
   const getItems = async () => {
     try {
       const items = await fetchShoppingItems();
