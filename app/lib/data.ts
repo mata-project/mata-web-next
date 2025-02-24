@@ -163,3 +163,13 @@ export async function getUser(
     return undefined;
   }
 }
+
+// TODO implement a query to api to return username.
+export async function getUserName(): Promise<string> {
+  try {
+    return "User";
+  } catch (error) {
+    console.error("Error getting user name:", error);
+    return "User";
+  }
+}

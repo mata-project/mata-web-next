@@ -9,14 +9,17 @@ import {
   addShoppingItem,
   deleteShoppingItem,
   fetchShoppingItems,
+  getUserName,
 } from "../../lib/data";
 
 export default function HomeComponent() {
   const [items, setItems] = useState<Item[]>([]);
+  const [name, setName] = useState<string>("");
 
   // Add useEffect to fetch markets on component mount
   useEffect(() => {
     getItems();
+    getName();
   }, []);
 
   const getItems = async () => {
@@ -50,9 +53,20 @@ export default function HomeComponent() {
     }
   };
 
+  const getName = async () => {
+    try {
+      const name = await getUserName();
+      setName(name);
+      console.log("username is fetched");
+    } catch (error) {
+      console.log("Error fetching username:", error);
+      setName("");
+    }
+  };
+
   return (
     <div>
-      <UserInfo />
+      <UserInfo name={name} />
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} deleteItem={deleteItem} />
