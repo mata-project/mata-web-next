@@ -41,7 +41,7 @@ export async function fetchShoppingItems() {
       body: JSON.stringify({
         query: `
           query {
-            shoppingItems(userId: ${userId}) {
+            shoppingItems(userId: "${userId}") {
             id
             name
             market{
@@ -74,7 +74,7 @@ export async function addShoppingItem(item: Item) {
       body: JSON.stringify({
         query: `
           mutation {
-            addShoppingItem(userId: ${userId}, name: "${item.name}", marketId: ${item.market.id}) {
+            addShoppingItem(userId: "${userId}", name: "${item.name}", marketId: ${item.market.id}) {
               id
               name
               market {
@@ -107,7 +107,7 @@ export async function deleteShoppingItem(item: Item) {
       body: JSON.stringify({
         query: `
            mutation {
-            deleteShoppingItem(userId: ${userId}, shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
+            deleteShoppingItem(userId: "${userId}", shoppingItemId: ${item.id}, marketId: ${item.market.id}) {
               __typename
               }
             }

@@ -36,7 +36,7 @@ export async function authenticate(
     }
 
     // Create session after successful authentication
-    await createSession(Number(user.id));
+    await createSession(user.id);
 
     // Redirect after successful authentication
     redirect("/home");
@@ -52,7 +52,7 @@ export async function authenticate(
     throw error;
   }
 }
-export async function getSessionValue(): Promise<number | undefined> {
+export async function getSessionValue(): Promise<string | undefined> {
   let sessionCookie;
   let retries = 3;
 
@@ -63,7 +63,6 @@ export async function getSessionValue(): Promise<number | undefined> {
   }
 
   if (!sessionCookie) return undefined;
-
-  const result = await decrypt(sessionCookie.value);
-  return result?.userId as number;
+  const result = (await decrypt(sessionCookie.value)) as { userId?: string };
+  return result?.userId;
 }
