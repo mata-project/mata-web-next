@@ -70,6 +70,11 @@ export default function HomeComponent() {
       <Banner />
       <ShoppingItemAddingForm addItem={addItem} />
       <SupermarketsList items={items} deleteItem={deleteItem} />
+      <footer className="mt-8 p-4 bg-gray-100 text-center">
+        <p className="text-gray-600">
+          contact for feedback: caglarcercinli@outlook.com
+        </p>
+      </footer>
     </div>
   );
 }
