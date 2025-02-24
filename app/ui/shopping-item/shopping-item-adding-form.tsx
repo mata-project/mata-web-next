@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Item } from "../item/item";
+import { fetchMarkets } from "../../lib/data";
 
 export default function ShoppingItemAddingForm({
   addItem,
@@ -8,19 +9,37 @@ export default function ShoppingItemAddingForm({
   addItem: (item: Item) => void;
 }) {
   const [name, setName] = useState<string>("");
-  //const [quantity, setQuantity] = useState<number | string>();
-  const [supermarket, setSupermarket] = useState<string>("");
+  const [supermarket, setSupermarket] = useState<any>({});
+  const [markets, setMarkets] = useState<any[]>([]);
+
+  // Add useEffect to fetch markets on component mount
+  useEffect(() => {
+    getMarkets();
+  }, []);
+
+  const getMarkets = async () => {
+    try {
+      const markets = await fetchMarkets();
+      setMarkets(markets);
+      console.log("markets are fetched");
+    } catch (error) {
+      console.log("Error fetching markets:", error);
+      setMarkets([]);
+    }
+  };
 
   const handleAddItem = () => {
-    if (name) {
+    if (name && supermarket.id) {
       const item: Item = {
-        itemName: name,
-        supermarket,
+        name: name,
+        market: {
+          id: supermarket.id,
+          name: supermarket.name,
+        },
       };
       addItem(item);
       setName("");
-      //setQuantity("");
-      setSupermarket("");
+      setSupermarket({});
     } else {
       alert("Please fill all fields before adding an item.");
     }
@@ -67,26 +86,19 @@ export default function ShoppingItemAddingForm({
           }}
         />
       </div>
-      <div style={{ marginBottom: "8px" }}>
-        {/* <label>
-          Quantity:
-          <input
-            type="number"
-            // value={quantity}
-            // onChange={(e) => setQuantity(Number(e.target.value))}
-            min="1"
-            placeholder="Enter quantity"
-            style={{ marginLeft: "8px", padding: "4px", width: "100%" }}
-          />
-        </label> */}
-      </div>
+      <div style={{ marginBottom: "8px" }}></div>
       <div style={{ marginBottom: "16px" }}>
         <label style={{ display: "block", marginBottom: "8px" }}>
           Supermarket:
         </label>
         <select
-          value={supermarket}
-          onChange={(e) => setSupermarket(e.target.value)}
+          value={supermarket.name || ""}
+          onChange={(e) =>
+            setSupermarket({
+              name: e.target.value,
+              id: markets.find((m) => m.name === e.target.value)?.id || "",
+            })
+          }
           style={{
             width: "100%",
             padding: "12px 8px",
@@ -100,39 +112,15 @@ export default function ShoppingItemAddingForm({
           <option value="" style={{ padding: "16px 8px", fontSize: "16px" }}>
             Select a supermarket
           </option>
-          <option
-            value="Lidl"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Lidl
-          </option>
-          <option
-            value="Aldi"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Aldi
-          </option>
-          <option value="AH" style={{ padding: "16px 8px", fontSize: "16px" }}>
-            AH
-          </option>
-          <option
-            value="Delhaize"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Delhaize
-          </option>
-          <option
-            value="Turk Market"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Turk Market
-          </option>
-          <option
-            value="Action"
-            style={{ padding: "16px 8px", fontSize: "16px" }}
-          >
-            Action
-          </option>
+          {markets.map((market) => (
+            <option
+              key={market.id}
+              value={market.name}
+              style={{ padding: "16px 8px", fontSize: "16px" }}
+            >
+              {market.name}
+            </option>
+          ))}
         </select>
       </div>
       <button

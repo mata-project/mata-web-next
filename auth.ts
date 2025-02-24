@@ -1,31 +1,30 @@
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import { authConfig } from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+import { getUser } from "./app/lib/data";
 
-// TODO get values from backend
-function getUser(email: string): any {
-  return {
-    email: "mock@mock.com",
-    password: "password",
-  };
-}
+// Moved to data.ts
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({
+            email: z.string().email(),
+            password: z.string().min(6),
+          })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          const user = getUser(email);
-          if (!user) return null;
-          const passwordsMatch = password === user.password;
-          if (passwordsMatch) return user;
+          const user = await getUser(email, password);
+          if (user?.email === email) {
+            return user;
+          }
+          return null;
         }
 
         console.log("Invalid credentials");

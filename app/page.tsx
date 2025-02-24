@@ -1,5 +1,4 @@
 import Link from "next/link";
-import HomeComponent from "./ui/home/home";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 export default function Page() {

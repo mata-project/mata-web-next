@@ -1,5 +1,7 @@
+import { Market } from "../market/market";
+
 export type Item = {
-  itemName: string;
-  //   quantity: number;
-  supermarket: string;
+  id?: number;
+  name: string;
+  market: Market;
 };
